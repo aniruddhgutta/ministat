@@ -1,5 +1,5 @@
 #define _DEFAULT_SOURCE
-#include "../minibar.h"
+#include "../ministat.h"
 #include <ifaddrs.h>
 #include <net/if.h>
 #include <sys/socket.h>

@@ -1,4 +1,4 @@
-#include "../minibar.h"
+#include "../ministat.h"
 #include <time.h>
 
 int datetime(char *buf, size_t len, const char *fmt) {

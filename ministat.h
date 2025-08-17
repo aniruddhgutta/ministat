@@ -1,9 +1,9 @@
-#ifndef MINIBAR_H
-#define MINIBAR_H
+#ifndef MINISTAT_H
+#define MINISTAT_H
 
-#include <stddef.h>  /* For size_t */
-#include <stdio.h>   /* For snprintf */
-#include <linux/limits.h> /* For PATH_MAX */
+#include <stddef.h>
+#include <stdio.h>
+#include <linux/limits.h>
 
 int datetime(char *buf, size_t len, const char *fmt);
 int battery(char *buf, size_t len, const char *fmt);
@@ -15,4 +15,4 @@ int volume(char *str, size_t size, const char *fmt);
 int bluetooth(char *str, size_t size, const char *arg);
 int shell(char *buf, size_t len, const char *script);
 
-#endif /* MINIBAR_H */
+#endif

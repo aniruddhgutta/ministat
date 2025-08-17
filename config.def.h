@@ -1,4 +1,4 @@
-#include "minibar.h"
+#include "ministat.h"
 
 static const struct arg {
     int (*func)(char *, size_t, const char *);

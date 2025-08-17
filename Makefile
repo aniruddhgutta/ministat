@@ -3,10 +3,10 @@
 VERSION   = 1.0
 PREFIX    = /usr/local
 WLCFLAGS    = -std=c99 -pedantic -Wall -O2 $(CPPFLAGS) $(CFLAGS)
-SRC				= minibar.c $(wildcard mods/*.c) $(PROTO:.h=.c)
+SRC				= ministat.c $(wildcard mods/*.c) $(PROTO:.h=.c)
 OBJ       = $(SRC:.c=.o)
 
-all: minibar
+all: ministat
 
 .c.o:
 	$(CC) -o $@ $(WLCFLAGS) -c $<
@@ -16,18 +16,18 @@ $(OBJ): config.h $(PROTO)
 config.h:
 	cp config.def.h $@
 
-minibar: $(OBJ)
+ministat: $(OBJ)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS) -lasound
 
 clean:
-	rm -f minibar $(OBJ) $(PROTO) $(PROTO:.h=.c)
+	rm -f ministat $(OBJ) $(PROTO) $(PROTO:.h=.c)
 
 install: all
 	mkdir -p $(DESTDIR)$(PREFIX)/bin
-	cp -f minibar $(DESTDIR)$(PREFIX)/bin
-	chmod 755 $(DESTDIR)$(PREFIX)/bin/minibar
+	cp -f ministat $(DESTDIR)$(PREFIX)/bin
+	chmod 755 $(DESTDIR)$(PREFIX)/bin/ministat
 
 uninstall:
-	rm -f $(DESTDIR)$(PREFIX)/bin/minibar
+	rm -f $(DESTDIR)$(PREFIX)/bin/ministat
 
 .PHONY: all clean install uninstall

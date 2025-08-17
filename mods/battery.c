@@ -1,4 +1,4 @@
-#include "../minibar.h"
+#include "../ministat.h"
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
