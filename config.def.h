@@ -5,16 +5,17 @@ static const struct arg {
     const char *fmt;
     const char *arg;
 } 
+
 args[] = {
     /* function       format          argument */
-/*  { shell,          "  %s  |",      "tomato -t" }, */
+    { shell,          "  %s  |",      "tomato -t" },
     { shell,          "  %s  |",      "media -s" },
     { network,        "  %s",         "wlp4s0" },
 /*  { bluetooth,      "  %s",         NULL }, */
-    { volume,         "  %s",         NULL },
-    { battery,        "  %s  |",      NULL },
+    { volume,         "  %s",         "Master" },
+    { battery,        "  %s",         NULL },
+    { ram,            "  %sMi  |",    NULL },
 /*  { temp,           "  %s℃ ",       "hwmon5" }, */
 /*  { cpu,            " %s%%",        NULL }, */
-/*  { ram,            "  %sMi  |",    NULL }, */
     { datetime,       "  %s ",        "%b %d, %H:%M" },
 };

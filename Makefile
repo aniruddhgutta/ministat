@@ -17,7 +17,7 @@ config.h:
 	cp config.def.h $@
 
 minibar: $(OBJ)
-	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS)
+	$(CC) $(LDFLAGS) -o $@ $^ $(LDLIBS) -lasound
 
 clean:
 	rm -f minibar $(OBJ) $(PROTO) $(PROTO:.h=.c)

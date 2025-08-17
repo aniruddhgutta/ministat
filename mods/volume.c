@@ -1,39 +1,53 @@
-#define _POSIX_C_SOURCE 2
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
+#include <alloca.h>
+#include <alsa/asoundlib.h>
 
-static const char *icons[] = {
-  "󰝟", /* Muted */
-  "󰕿", /* 0 */
-  "󰖀", /* 1–50 */
-  "󰕾"  /* 51+ */
-};
+static const char *ic[] = { "󰝟", "󰕿", "󰖀", "󰕾" };
+static const char *dev = "default";
 
 int
-volume(char *buf, size_t len, const char *fmt)
+volume(char *buf, size_t len, const char *mixname)
 {
-  FILE *fp;
-  char line[128] = {0};
-  int vol = -1;
-  int muted = 0;
+  snd_mixer_t *mixer = NULL;
+  snd_mixer_selem_id_t *mixid = NULL;
+  snd_mixer_elem_t *elem = NULL;
+  long min = 0, max = 0, volume = -1;
+  int sw1 = 1, sw2 = 1, perc;
+  const char *icon;
 
-  fp = popen("wpctl get-volume @DEFAULT_AUDIO_SINK@", "r");
-  if (fp && fgets(line, sizeof(line), fp)) {
-    double fvol = 0.0;
-    if (sscanf(line, "Volume: %lf", &fvol) == 1) {
-      vol = (int)(fvol * 100);
-    }
-    muted = strstr(line, "[MUTED]") != NULL;
-  }
-  if (fp) pclose(fp);
+  if (!mixname) return snprintf(buf, len, "n/a");
 
-  if (muted || vol == -1)
-    return snprintf(buf, len, fmt ? fmt : "%s", icons[0]);
+  if (snd_mixer_open(&mixer, 0)) return snprintf(buf, len, "n/a");
+  if (snd_mixer_attach(mixer, dev) ||
+    snd_mixer_selem_register(mixer, NULL, NULL) ||
+    snd_mixer_load(mixer)) goto cleanup;
 
-  const char *icon = vol == 0 ? icons[1] : vol <= 50 ? icons[2] : icons[3];
+  snd_mixer_selem_id_alloca(&mixid);
+  snd_mixer_selem_id_set_name(mixid, mixname);
+  snd_mixer_selem_id_set_index(mixid, 0);
 
-  return fmt
-    ? snprintf(buf, len, fmt, icon, vol)
-    : snprintf(buf, len, "%s", icon);
+  if (!(elem = snd_mixer_find_selem(mixer, mixid))) goto cleanup;
+  if (snd_mixer_selem_get_playback_volume_range(elem, &min, &max)) goto cleanup;
+  if (snd_mixer_selem_get_playback_volume(elem, SND_MIXER_SCHN_MONO, &volume)) goto cleanup;
+  snd_mixer_selem_get_playback_switch(elem, 0, &sw1);
+  snd_mixer_selem_get_playback_switch(elem, 1, &sw2);
+
+cleanup:
+  snd_mixer_free(mixer);
+  snd_mixer_detach(mixer, dev);
+  snd_mixer_close(mixer);
+
+  if (volume == -1) return snprintf(buf, len, "n/a");
+  if (!(sw1 || sw2)) return snprintf(buf, len, "%s 0", ic[0]);
+
+  perc = (int)((volume - min) * 100.0 / (max - min) + 0.5);
+  if (perc == 0)
+    icon = ic[1];
+  else if (perc <= 49)
+    icon = ic[2];
+  else
+    icon = ic[3];
+
+  return snprintf(buf, len, "%s %d", icon, perc);
 }
