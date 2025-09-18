@@ -7,15 +7,15 @@ static const struct arg {
 } 
 
 args[] = {
-    /* function       format          argument */
-    { shell,          "  %s  |",      "tomato -t" },
-    { shell,          "  %s  |",      "media -s" },
-    { network,        "  %s",         "wlp4s0" },
-/*  { bluetooth,      "  %s",         NULL }, */
-    { volume,         "  %s",         "Master" },
-    { battery,        "  %s",         NULL },
-    { ram,            "  %sMi  |",    NULL },
-/*  { temp,           "  %s℃ ",       "hwmon5" }, */
-/*  { cpu,            " %s%%",        NULL }, */
-    { datetime,       "  %s ",        "%b %d, %H:%M" },
+    /* function       format            argument */
+/*  { shell,          "  %s  |",        "tomato -t" }, */
+    { shell,          "  %s  |",        "media -s" },
+    { network,        "  %s",           "wlp4s0" },
+    { battery,        "  %s",           NULL },
+    { volume,         "  %s  |",        "Master" },
+/*  { bluetooth,      "  %s",           NULL }, */
+    { ram,            "  %sMi",         NULL },
+    { temp,           "  %s℃ ",         "hwmon5" },
+    { cpu,            "  %s  |",        NULL },
+    { datetime,       "  %s ",          "%b %d, %H:%M" },
 };
