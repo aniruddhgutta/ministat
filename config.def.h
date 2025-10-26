@@ -10,6 +10,7 @@ args[] = {
     /* function       format          argument */
     { shell,          "  %s  |",      "media -s" },
     { network,        "  %s",         "wlan0" },    /* wlp4s0 */
+    { bluetooth,      "  %s",         NULL },
     { battery,        "  %s",         NULL },
     { volume,         "  %s  |",      "Master" },
     { ram,            "  %sMi",       NULL },
